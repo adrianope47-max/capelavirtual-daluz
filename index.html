@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Capela de Luz - Velas Virtuais</title>
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: linear-gradient(#0a0a2a, #1a1a3d);
+  color: white;
+  text-align: center;
+}
+
+h1 {
+  margin-top: 20px;
+  color: gold;
+}
+
+.form {
+  background: rgba(255,255,255,0.1);
+  padding: 20px;
+  margin: 20px auto;
+  width: 300px;
+  border-radius: 10px;
+}
+
+input, select, textarea, button {
+  width: 100%;
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+}
+
+button {
+  background: gold;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.mural {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.candle {
+  background: rgba(255,255,255,0.1);
+  margin: 10px;
+  padding: 10px;
+  width: 150px;
+  border-radius: 10px;
+}
+
+.flame {
+  font-size: 30px;
+  animation: flame 1s infinite alternate;
+}
+
+@keyframes flame {
+  from { opacity: 0.5; }
+  to { opacity: 1; }
+}
+</style>
+</head>
+
+<body>
+
+<h1>🕯️ Capela de Luz</h1>
+<p>Acenda sua vela com fé</p>
+
+<div class="form">
+<input id="nome" placeholder="Nome" required>
+<input id="cidade" placeholder="Cidade" required>
+
+<select id="estado">
+<option value="">Estado</option>
+<option>SP</option>
+<option>RJ</option>
+<option>MG</option>
+<option>BA</option>
+<option>RS</option>
+</select>
+
+<textarea id="motivo" placeholder="Motivo da oração"></textarea>
+
+<select id="plano">
+<option value="">Plano</option>
+<option value="https://mpago.la/1gcVWbw">24 horas</option>
+<option value="https://mpago.la/2AngAXd">7 dias</option>
+<option value="https://mpago.la/2KBH2Vh">15 dias</option>
+<option value="https://mpago.la/1PFpY8a">30 dias</option>
+<option value="https://mpago.la/1cvwKEQ">90 dias</option>
+<option value="https://mpago.la/1iu4u9A">1 ano</option>
+</select>
+
+<button onclick="acender()">Acender Vela</button>
+</div>
+
+<h2>🔥 Mural de Velas</h2>
+<div class="mural" id="mural"></div>
+
+<script>
+function acender() {
+  let nome = document.getElementById("nome").value;
+  let cidade = document.getElementById("cidade").value;
+  let estado = document.getElementById("estado").value;
+  let motivo = document.getElementById("motivo").value;
+  let plano = document.getElementById("plano").value;
+
+  if (!nome || !cidade || !estado || !plano) {
+    alert("Preencha todos os campos");
+    return;
+  }
+
+  let vela = {
+    nome,
+    cidade,
+    estado,
+    motivo
+  };
+
+  let velas = JSON.parse(localStorage.getItem("velas") || "[]");
+  velas.push(vela);
+  localStorage.setItem("velas", JSON.stringify(velas));
+
+  render();
+
+  window.open(plano, "_blank");
+}
+
+function render() {
+  let mural = document.getElementById("mural");
+  mural.innerHTML = "";
+
+  let velas = JSON.parse(localStorage.getItem("velas") || "[]");
+
+  velas.forEach(v => {
+    mural.innerHTML += `
+      <div class="candle">
+        <div class="flame">🕯️</div>
+        <strong>${v.nome}</strong><br>
+        ${v.cidade}/${v.estado}<br>
+        <small>${v.motivo}</small>
+      </div>
+    `;
+  });
+}
+
+render();
+</script>
+
+</body>
+</html>
